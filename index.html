@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQUAD WAR - Free Fire Tournament</title>
+  <style>
+    :root {
+      --primary: #ff6b00;
+      --secondary: #121212;
+      --light: #e0e0e0;
+      --dark: #1a1a1a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rajdhani', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      /* background-color: var(--secondary);
+      color: var(--light);
+      min-height: 100vh; */
+      background: url("/WhatsApp\ Image\ 2025-08-19\ at\ 11.26.05.jpeg") no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: white; /* better contrast */
+    }
+   
+
+
+    .banner {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+        url('https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt29d7c4f6bc077e9c/5eb26f54402b8b4d13a56656/06032020-Valorant_Red_1.jpg') center/cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .banner h1 {
+      font-size: 3.5rem;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .banner p {
+      font-size: 1.5rem;
+      color: white;
+      letter-spacing: 2px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--primary);
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      background: var(--dark);
+      border-radius: 5px 5px 0 0;
+      color: var(--light);
+      font-weight: 600;
+      transition: all 0.3s;
+      user-select: none;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: var(--dark);
+    }
+
+    .tab-content {
+      display: none;
+      background: var(--dark);
+      padding: 2rem;
+      border-radius: 0 5px 5px 5px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      border: 1px solid #333;
+    }
+
+    .tab-content.active { display: block; }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      font-size: 2rem;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .form-group { margin-bottom: 1.5rem; }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.75rem;
+      background: #333;
+      border: 1px solid #444;
+      border-radius: 4px;
+      font-size: 1rem;
+      color: white;
+    }
+
+    input:focus, select:focus { outline: none; border-color: var(--primary); }
+
+    button {
+      background-color: var(--primary);
+      color: var(--dark);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    button:hover {
+      background-color: #ff8c00;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(255,107,0,0.3);
+    }
+
+    .qr-container {
+      text-align: center;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border: 2px dashed var(--primary);
+      border-radius: 5px;
+      background: rgba(0,0,0,0.3);
+    }
+
+    #qrCode {
+      width: 227px;
+      height: 227px;
+      margin: 1rem auto;
+      background-color: white;
+      padding: 1rem;
+    }
+
+    .team-member { display: flex; gap: 1rem; margin-bottom: 1rem; }
+    .team-member input { flex: 1; }
+
+    .tournament-card {
+      background: #252525;
+      border-radius: 5px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      border-left: 4px solid var(--primary);
+      transition: transform 0.3s;
+    }
+
+    .tournament-card:hover { transform: translateY(-5px); }
+
+    .tournament-card h3 { color: var(--primary); font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+    .tournament-meta { display: flex; justify-content: space-between; margin: 1rem 0; color: #aaa; gap: 10px; flex-wrap: wrap; }
+
+    .payment-methods { display: flex; gap: 1rem; margin: 1.5rem 0; }
+
+    .payment-method {
+      flex: 1;
+      text-align: center;
+      padding: 1.5rem 1rem;
+      border: 1px solid #444;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+      user-select: none;
+    }
+
+    .payment-method:hover { border-color: var(--primary); }
+    .payment-method.selected { border-color: var(--primary); background-color: rgba(255,107,0,0.1); }
+    .payment-method h3 { color: var(--primary); margin-bottom: 0.5rem; }
+
+    .amount-display { font-size: 1.5rem; color: var(--primary); font-weight: bold; margin: 1rem 0; }
+
+    .status-badge { background: #25D366; color: white; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8rem; margin-left: 0.5rem; }
+
+    .team-members-list { list-style-type: none; margin: 1rem 0; }
+    .team-members-list li { padding: 0.5rem; border-bottom: 1px solid #333; }
+
+    .admin-notice { background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); }
+    .admin-number { font-weight: bold; color: var(--primary); background: rgba(0,0,0,0.5); padding: 0.2rem 0.5rem; border-radius: 3px; }
+
+    .inline-actions { display: flex; gap: .5rem; margin-top: .5rem; flex-wrap: wrap; }
+
+    @media (max-width: 768px) {
+      .banner h1 { font-size: 2.5rem; }
+      .banner p { font-size: 1.2rem; }
+      .team-member { flex-direction: column; }
+      .payment-methods { flex-direction: column; }
+      .tabs { flex-wrap: wrap; }
+      .tab { margin-bottom: 0.25rem; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="banner">
+    <h1>SQUAD WAR</h1>
+    <p>Free Fire Tournament Platform</p>
+  </div>
+
+  <div class="container">
+    <div class="tabs">
+      <div class="tab active" data-tab="tournaments" onclick="openTab(this,'tournaments')">Tournaments</div>
+      <div class="tab" data-tab="register-team" onclick="openTab(this,'register-team')">Register Team</div>
+      <!-- <div class="tab" data-tab="my-teams" onclick="openTab(this,'my-teams')">My Teams</div> -->
+    </div>
+
+    <div id="tournaments" class="tab-content active">
+      <h2>Upcoming Tournaments</h2>
+
+      <!-- <div class="tournament-card">
+        <h3>Solo Deathmatch Championship</h3>
+        <div class="tournament-meta">
+          <span>📅 25th June 2023</span>
+          <span>⏰ 7:00 PM IST</span>
+        </div>
+        <p>1v1 deathmatch tournament with knockout rounds. Prove your skills in intense solo battles.</p>
+        <div class="tournament-meta">
+          <span>🎮 Solo</span>
+          <span>💰 Entry Fee: ₹100</span>
+          <span>🏆 Prize: ₹5000</span>
+        </div>
+        <button onclick="registerForTournament('solo',100)">Register Now</button>
+      </div> -->
+
+      <div class="tournament-card">
+        <h3>Squad Battle Royale</h3>
+        <div class="tournament-meta">
+          <span>📅 24th August 2025</span>
+          <span>⏰ 12:00 PM IST</span>
+        </div>
+        <p>4v4 battle royale tournament. Team up with your squad and dominate the battlefield.</p>
+        <div class="tournament-meta">
+          <span>🎮 Squad (4 players)</span>
+          <span>💰 Entry Fee: ₹499</span>
+          <span>🏆 Prize: ₹5,000</span>
+        </div>
+        <button onclick="registerForTournament('squad',499)">Register Now</button>
+      </div>
+    </div>
+
+    <div id="register-team" class="tab-content">
+      <h2>Register Your Team</h2>
+
+      <div class="admin-notice">
+        <p>After registration, you'll receive confirmation from:</p>
+        <p>Admin Contact: <span id="admin-number" class="admin-number">+91 7852919235</span></p>
+      </div>
+
+      <div class="form-group">
+        <label for="team-name">Team Name</label>
+        <input type="text" id="team-name" placeholder="Enter your team name" />
+      </div>
+
+      <div class="form-group">
+        <label>Team Members</label>
+        <div class="team-member">
+          <input type="text" placeholder="Free Fire ID" class="ff-id" />
+          <input type="text" placeholder="In-Game Name" class="ign" />
+        </div>
+        <div class="team-member">
+          <input type="text" placeholder="Free Fire ID" class="ff-id" />
+          <input type="text" placeholder="In-Game Name" class="ign" />
+        </div>
+        <div class="team-member">
+          <input type="text" placeholder="Free Fire ID" class="ff-id" />
+          <input type="text" placeholder="In-Game Name" class="ign" />
+        </div>
+        <div class="team-member">
+          <input type="text" placeholder="Free Fire ID" class="ff-id" />
+          <input type="text" placeholder="In-Game Name" class="ign" />
+        </div>
+        <div class="inline-actions">
+          <!-- <button type="button" onclick="addMemberRow()">+ Add Member</button> -->
+          <button type="button" onclick="clearMembers()">Clear Members</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="tournament-select">Select Tournament</label>
+        <select id="tournament-select" onchange="updateTournamentDetails()">
+          <option value="">-- Select Tournament --</option>
+          <!-- <option value="solo" data-fee="100">Solo Deathmatch (₹100)</option> -->
+          <option value="squad" data-fee="499">Squad Battle Royale (₹499)</option>
+        </select>
+      </div>
+
+      <div class="amount-display">
+        Entry Fee: ₹<span id="entry-fee">0</span>
+      </div>
+
+      <div class="payment-methods">
+        <div class="payment-method selected" onclick="selectPayment(this,'qr')">
+          <h3>UPI QR Code</h3>
+          <p>Scan and pay with any UPI app</p>
+        </div>
+        <div class="payment-method" onclick="selectPayment(this,'card')">
+          <h3>Credit/Debit Card</h3>
+          <p>Pay with Visa, Mastercard, etc.</p>
+        </div>
+        <div class="payment-method" onclick="selectPayment(this,'netbanking')">
+          <h3>Net Banking</h3>
+          <p>Direct bank transfer</p>
+        </div>
+      </div>
+
+      <div class="qr-container" id="qrPaymentSection">
+        <h3>Scan QR Code to Pay</h3>
+        <div id="qrCode"></div>
+        <p>Amount: <strong>₹<span id="qr-amount">0</span></strong></p>
+      </div>
+
+      <button class="register-btn" onclick="registerTeam()">Complete Registration</button>
+    </div>
+
+    <div id="my-teams" class="tab-content">
+      <h2>My Teams</h2>
+      <div id="teams-list">
+        <p>No teams registered yet. Register a team to participate in tournaments.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+  <script>
+    // ===== Config =====
+    const ADMIN_NUMBER_DISPLAY = "+91 XXX"; // shown to users
+    const ADMIN_WHATSAPP = "918249899537";        // WhatsApp phone (countrycode + number, no +)
+    const UPI_ID = "8249899537@omni";                // your UPI ID
+    const UPI_NAME = "SquadWar";                  // payee name
+
+    // ===== State =====
+    let currentTournament = { type: '', fee: 0, name: '' };
+
+    // ===== Tabs =====
+    function openTab(el, tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      el.classList.add('active');
+    }
+
+    function openTabById(tabId) {
+      const tabBtn = document.querySelector(`.tab[data-tab="${tabId}"]`);
+      if (tabBtn) openTab(tabBtn, tabId);
+    }
+
+    // ===== Tournament Actions =====
+    function registerForTournament(type, fee) {
+      openTabById('register-team');
+      currentTournament.type = type;
+      currentTournament.fee = Number(fee) || 0;
+      currentTournament.name = type === 'solo' ? 'Solo Deathmatch' : 'Squad Battle Royale';
+
+      document.getElementById('tournament-select').value = type;
+      document.getElementById('entry-fee').textContent = currentTournament.fee;
+      document.getElementById('qr-amount').textContent = currentTournament.fee;
+
+      // Show/hide member rows for solo
+      applyMemberVisibility(type);
+
+      generateQRCode(currentTournament.fee);
+    }
+
+    function updateTournamentDetails() {
+      const select = document.getElementById('tournament-select');
+      if (!select.value) {
+        currentTournament = { type: '', fee: 0, name: '' };
+        document.getElementById('entry-fee').textContent = '0';
+        document.getElementById('qr-amount').textContent = '0';
+        document.getElementById('qrCode').innerHTML = '';
+        applyMemberVisibility('squad'); // default show all
+        return;
+      }
+
+      const selectedOption = select.options[select.selectedIndex];
+      const fee = Number(selectedOption.getAttribute('data-fee')) || 0;
+
+      currentTournament.type = select.value;
+      currentTournament.fee = fee;
+      currentTournament.name = selectedOption.text.split(' (')[0];
+
+      document.getElementById('entry-fee').textContent = fee;
+      document.getElementById('qr-amount').textContent = fee;
+
+      applyMemberVisibility(currentTournament.type);
+      generateQRCode(fee);
+    }
+
+    function applyMemberVisibility(type) {
+      const members = document.querySelectorAll('.team-member');
+      if (type === 'solo') {
+        members.forEach((m, idx) => m.style.display = idx === 0 ? 'flex' : 'none');
+      } else {
+        members.forEach(m => m.style.display = 'flex');
+      }
+    }
+
+    function selectPayment(el, method) {
+      document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+      el.classList.add('selected');
+      const qrSec = document.getElementById('qrPaymentSection');
+      if (method === 'qr') {
+        qrSec.style.display = 'block';
+        generateQRCode(currentTournament.fee);
+      } else {
+        qrSec.style.display = 'none';
+      }
+    }
+
+    function generateQRCode(amount = 0) {
+      const qrWrap = document.getElementById('qrCode');
+      qrWrap.innerHTML = '';
+      if (amount <= 0) return;
+      new QRCode(qrWrap, {
+        text: `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(UPI_NAME)}&am=${amount}&cu=INR&tn=${encodeURIComponent(currentTournament.name)}`,
+        width: 200,
+        height: 200,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+    }
+
+    // ===== Team Registration =====
+    function validateTeamRegistration() {
+      const teamName = document.getElementById('team-name').value.trim();
+      const tournament = document.getElementById('tournament-select').value;
+
+      if (!teamName) { alert('Please enter a team name'); return false; }
+      if (!tournament) { alert('Please select a tournament'); return false; }
+
+      const members = [];
+      const memberElements = document.querySelectorAll('.team-member');
+      memberElements.forEach(member => {
+        if (member.style.display === 'none') return; // skip hidden rows
+        const ffId = member.querySelector('.ff-id').value.trim();
+        const ign = member.querySelector('.ign').value.trim();
+        if (ffId && ign) members.push({ ffId, ign });
+      });
+
+      if (members.length === 0) { alert('Please add at least one team member'); return false; }
+      if (currentTournament.type === 'squad' && members.length < 4) { alert('Squad tournaments require 4 team members'); return false; }
+      if (currentTournament.type === 'solo' && members.length !== 1) { alert('Solo tournament requires exactly 1 player'); return false; }
+
+      return { teamName, tournament, members };
+    }
+
+    function registerTeam() {
+      const validation = validateTeamRegistration();
+      if (!validation) return;
+
+      const { teamName, members } = validation;
+
+      const teamData = {
+        name: teamName,
+        tournament: currentTournament.name,
+        type: currentTournament.type,
+        members,
+        fee: currentTournament.fee,
+        date: new Date().toLocaleString(),
+        status: 'Pending Approval',
+        adminContact: ADMIN_NUMBER_DISPLAY,
+      };
+
+      // Save locally (optional for user's view)
+      const teams = JSON.parse(localStorage.getItem('teams')) || [];
+      teams.push(teamData);
+      localStorage.setItem('teams', JSON.stringify(teams));
+
+      // Build WhatsApp message
+      let message = `*New Tournament Registration* 🎮\n\n` +
+                    `*Team Name:* ${teamData.name}\n` +
+                    `*Tournament:* ${teamData.tournament}\n` +
+                    `*Type:* ${teamData.type.toUpperCase()}\n` +
+                    `*Entry Fee:* ₹${teamData.fee}\n` +
+                    `*Date:* ${teamData.date}\n\n` +
+                    `*Team Members:*\n`;
+      teamData.members.forEach((m, i) => {
+        message += `${i + 1}. ${m.ign} (ID: ${m.ffId})\n`;
+      });
+
+      const waUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank');
+
+      // UI updates
+      updateTeamsList();
+      openTabById('my-teams');
+      resetRegistrationForm();
+    }
+
+    function resetRegistrationForm() {
+      document.getElementById('team-name').value = '';
+      document.getElementById('tournament-select').value = '';
+      document.querySelectorAll('.ff-id, .ign').forEach(inp => inp.value = '');
+      document.getElementById('entry-fee').textContent = '0';
+      document.getElementById('qr-amount').textContent = '0';
+      document.getElementById('qrCode').innerHTML = '';
+      // Show all members by default
+      applyMemberVisibility('squad');
+    }
+
+    function updateTeamsList() {
+      const teamsList = document.getElementById('teams-list');
+      const teams = JSON.parse(localStorage.getItem('teams')) || [];
+
+      if (teams.length === 0) {
+        teamsList.innerHTML = '<p>No teams registered yet. Register a team to participate in tournaments.</p>';
+        return;
+      }
+
+      teamsList.innerHTML = '';
+
+      teams.forEach((team, index) => {
+        const card = document.createElement('div');
+        card.className = 'tournament-card';
+        card.innerHTML = `
+          <h3>${team.name} <span class="status-badge">${team.status}</span></h3>
+          <div class="tournament-meta">
+            <span>📅 ${team.date}</span>
+            <span>💰 ₹${team.fee}</span>
+          </div>
+          <p>Tournament: <strong>${team.tournament}</strong></p>
+          <p>Contact: <span class="admin-number">${team.adminContact}</span></p>
+          <h4 style="margin-top:1rem;color:var(--primary);">Team Members:</h4>
+          <ul class="team-members-list">
+            ${team.members.map(m => `<li>${m.ign} <small>(${m.ffId})</small></li>`).join('')}
+          </ul>
+          <div class="inline-actions">
+            <button onclick="resendWhatsApp(${index})">Send to WhatsApp</button>
+            <button onclick="deleteTeam(${index})">❌ Delete</button>
+          </div>
+        `;
+        teamsList.appendChild(card);
+      });
+    }
+
+    function deleteTeam(index) {
+      const teams = JSON.parse(localStorage.getItem('teams')) || [];
+      teams.splice(index, 1);
+      localStorage.setItem('teams', JSON.stringify(teams));
+      updateTeamsList();
+    }
+
+    function resendWhatsApp(index) {
+      const teams = JSON.parse(localStorage.getItem('teams')) || [];
+      const team = teams[index];
+      if (!team) return;
+      let message = `*Tournament Registration* 🎮\n\n` +
+                    `*Team Name:* ${team.name}\n` +
+                    `*Tournament:* ${team.tournament}\n` +
+                    `*Type:* ${team.type.toUpperCase()}\n` +
+                    `*Entry Fee:* ₹${team.fee}\n` +
+                    `*Date:* ${team.date}\n\n` +
+                    `*Team Members:*\n`;
+      team.members.forEach((m, i) => {
+        message += `${i + 1}. ${m.ign} (ID: ${m.ffId})\n`;
+      });
+      const waUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank');
+    }
+
+    // Helpers to manage dynamic member rows
+    function addMemberRow() {
+      const wrapper = document.querySelector('#register-team .form-group:nth-of-type(2)');
+      const row = document.createElement('div');
+      row.className = 'team-member';
+      row.innerHTML = `
+        <input type="text" placeholder="Free Fire ID" class="ff-id" />
+        <input type="text" placeholder="In-Game Name" class="ign" />
+      `;
+      wrapper.insertBefore(row, wrapper.querySelector('.inline-actions'));
+    }
+
+    function clearMembers() {
+      document.querySelectorAll('#register-team .team-member .ff-id, #register-team .team-member .ign').forEach(i => i.value = '');
+    }
+
+    // ===== Init =====
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('admin-number').textContent = ADMIN_NUMBER_DISPLAY;
+      updateTeamsList();
+    });
+  </script>
+</body>
+</html>
